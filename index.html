@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zomato</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sort-navbar">
+        <input type="text" id="searchInput" placeholder="Search for cuisine or restaurant" />
+        <button class="sorting" id="sorting">Sort by <i class="	fas fa-caret-right"></i></button>
+        <button class="sort-btn" id="pet">Pet friendly</button>
+        <button class="sort-btn" id="pricehigh">Price: High to Low</button>
+        <button class="sort-btn" id="pricelow">Price: Low to High</button>
+        <button class="sort-btn" id="rathigh">Rating: High to Low</button>
+        <button class="sort-btn" id="alpha">Name: A to Z</button>
+    </div>
+
+
+    <div class="modal">
+        <div class="sidebar">
+            <button class="active">Sort by</button>
+        </div>
+        <div class="content">
+            <h2>Sort by</h2>
+            <div class="radio-group">
+                
+                <label><input type="radio" name="sort" value="pet"> Pet Friendly</label>
+                <label><input type="radio" name="sort" value="rathigh"> Rating: High to Low</label>
+                <label><input type="radio" name="sort" value="pricelow"> Cost: Low to High</label>
+                <label><input type="radio" name="sort" value="pricehigh"> Cost: High to Low</label>
+                <label><input type="radio" name="sort" value="alpha"> Name: A to Z</label>
+            </div>
+            <div class="footer">
+                <button class="apply-btn" id="apply">Apply</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="cards-container"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
