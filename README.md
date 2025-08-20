@@ -1,7 +1,7 @@
 # 🍽️ Restaurant Listing Web App
-[Deployed](https://bib58.github.io/sorting_restaurants/)
+[**check out here**](https://bib58.github.io/sorting_restaurants/)
 
-* This is a responsive web application that lists restaurants and allows users to filter, sort, and search through various options seamlessly.
+This is a responsive web application that lists restaurants and allows users to filter, sort, and search through various options seamlessly.
 
 ## 🎯 Features
 
