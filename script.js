@@ -101,26 +101,26 @@ const restaurants = [
 ];
 
 function generateStars(rating) {
-	const fullStars = Math.floor(rating);
-	const halfStar = rating - fullStars >= 0.5;
-	let stars = "";
+    const fullStars = Math.floor(rating);
+    const halfStar = rating - fullStars >= 0.5;
+    let stars = "";
 
-	for (let i = 0; i < fullStars; i++) {
-		stars += '<i class="fa-solid fa-star"></i>';
-	}
-	if (halfStar)  stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+    for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fa-solid fa-star"></i>';
+    }
+    if (halfStar) stars += '<i class="fa-solid fa-star-half-stroke"></i>';
 
- 	return stars;
+    return stars;
 }
 
 function createRestaurantCards(restaurants) {
-  	const container = document.getElementById("cards-container");
+    const container = document.getElementById("cards-container");
 
-  	restaurants.forEach(rest => {
-    	const card = document.createElement("div");
-    	card.className = "card";
+    restaurants.forEach(rest => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-		card.innerHTML = `
+        card.innerHTML = `
 		<div class="image">
 			<img src="${rest.restaurant_image}.jpg" alt="${rest.restaurant_name}">
 			<div class="star-rating">${generateStars(rest.rating)}</div>
@@ -136,8 +136,8 @@ function createRestaurantCards(restaurants) {
 		<div class="location">${rest.location}</div>
 		`;
 
-    	container.appendChild(card);
-  	});
+        container.appendChild(card);
+    });
 }
 window.onload = createRestaurantCards(restaurants);
 
@@ -145,125 +145,95 @@ window.onload = createRestaurantCards(restaurants);
 
 
 
-document.getElementById("pet").addEventListener("click" , (event) => {
 
-    if (event.target.style.border === "2px solid hotpink")  {
-        document.getElementById("cards-container").innerHTML = ""
-        createRestaurantCards(restaurants);
-        event.target.style.border = "none";
+const state = {
+    petFriendly: false,
+    sortBy: [], 
+    searchText: ''
+};
+
+
+function applyAllFilters() {
+    let filtered = [...restaurants];
+
+    if (state.petFriendly) {
+        filtered = filtered.filter(r => r.pet_friendly);
     }
-    else {
-        document.getElementById("cards-container").innerHTML = "";
-        const result = restaurants.filter((obj) => obj.pet_friendly);
-        createRestaurantCards(result);
-        event.target.style.border = "2px solid hotpink";
-    }
-});
 
-
-document.getElementById("rathigh").addEventListener("click", (event) => {
-
-    if (event.target.style.border === "2px solid hotpink") {
-        document.getElementById("cards-container").innerHTML = "";
-        createRestaurantCards(restaurants);
-        event.target.style.border = "none";
-    } 
-    else {
-        document.getElementById("cards-container").innerHTML = "";
-        const sorted = [...restaurants].sort((a, b) => b.rating - a.rating);
-        createRestaurantCards(sorted);
-        event.target.style.border = "2px solid hotpink";
-    }
-});
-
-
-document.getElementById("pricehigh").addEventListener("click", (event) => {
-
-    if (event.target.style.border === "2px solid hotpink") {
-        document.getElementById("cards-container").innerHTML = "";
-        createRestaurantCards(restaurants);
-        event.target.style.border = "none";
-    } 
-    else {
-        document.getElementById("cards-container").innerHTML = "";
-        const sorted = [...restaurants].sort((a, b) => (b.price_for_two) - (a.price_for_two));
-        createRestaurantCards(sorted);
-        event.target.style.border = "2px solid hotpink";
-    }
-});
-
-
-
-document.getElementById("pricelow").addEventListener("click", (event) => {
-
-    if (event.target.style.border === "2px solid hotpink") {
-        document.getElementById("cards-container").innerHTML = "";
-        createRestaurantCards(restaurants);
-        event.target.style.border = "none";
-    } 
-    else {
-        document.getElementById("cards-container").innerHTML = "";
-        const sorted = [...restaurants].sort((a, b) => a.price_for_two - b.price_for_two);
-        createRestaurantCards(sorted);
-        event.target.style.border = "2px solid hotpink";
-    }
-});
-
-document.getElementById("alpha").addEventListener("click", (event) => {
-
-    if (event.target.style.border === "2px solid hotpink") {
-        document.getElementById("cards-container").innerHTML = "";
-        createRestaurantCards(restaurants);
-        event.target.style.border = "none";
-    } 
-    else {
-        document.getElementById("cards-container").innerHTML = "";
-        const sorted = [...restaurants].sort((a, b) => 
-            a.restaurant_name.localeCompare(b.restaurant_name)
+    if (state.searchText) {
+        filtered = filtered.filter(r =>
+            r.food_type.some(type => type.toLowerCase().includes(state.searchText)) ||
+            r.restaurant_name.toLowerCase().includes(state.searchText)
         );
-        createRestaurantCards(sorted);
-        event.target.style.border = "2px solid hotpink";
     }
 
-});
+    state.sortBy.forEach(sortType => {
+        switch (sortType) {
+            case 'rathigh':
+                filtered.sort((a, b) => b.rating - a.rating);
+                break;
+            case 'pricelow':
+                filtered.sort((a, b) => a.price_for_two - b.price_for_two);
+                break;
+            case 'pricehigh':
+                filtered.sort((a, b) => b.price_for_two - a.price_for_two);
+                break;
+            case 'alpha':
+                filtered.sort((a, b) => a.restaurant_name.localeCompare(b.restaurant_name));
+                break;
+        }
+    });
 
-document.getElementById("sorting").addEventListener("click", () => {
-    if(document.querySelector(".modal").style.display === "flex") {
-        document.querySelector(".modal").style.display = "none";
-    }
-    else {
-        document.querySelector(".modal").style.display = "flex";
-    }
-});
-
-document.getElementById("apply").addEventListener("click", () => {
-    const element = document.querySelector('input[name="sort"]:checked').value;
-    if(element === "pet") {
-        document.getElementById("pet").click();
-    }
-    else if(element === "rathigh") {
-        document.getElementById("rathigh").click();
-    }
-    else if(element === "pricelow") {
-        document.getElementById("pricelow").click();
-    }
-    else if(element === "pricehigh") {
-        document.getElementById("pricehigh").click();
-    }
-    else if(element === "alpha") {
-        document.getElementById("alpha").click();
-    }
-    document.querySelector(".modal").style.display = "none";
-});
-
-
-
-document.getElementById("searchInput").addEventListener("input", function() {
-    const searchTerm = this.value.toLowerCase();
-    const filteredRestaurants = restaurants.filter(restaurant => 
-        restaurant.food_type.some(type => type.toLowerCase().includes(searchTerm)) ||
-        restaurant.restaurant_name.toLowerCase().includes(searchTerm)
-    );
     document.getElementById("cards-container").innerHTML = "";
-    createRestaurantCards(filteredRestaurants);
+    createRestaurantCards(filtered);
+}
+
+
+
+document.getElementById("pet").addEventListener("click", function () {
+    state.petFriendly = !state.petFriendly;
+    this.classList.toggle("active-btn", state.petFriendly);
+    applyAllFilters();
+});
+
+
+
+function handleSortClick(buttonId, sortType, group = null) {
+    const button = document.getElementById(buttonId);
+
+    button.addEventListener("click", function () {
+        
+        if (state.sortBy.includes(sortType)) {
+            state.sortBy = state.sortBy.filter(s => s !== sortType);
+            button.classList.remove("active-btn");
+        } 
+        else {
+            if (group === "price") {
+                /* remove other price sorts */
+
+                ["pricelow", "pricehigh"].forEach(id => {
+                    document.getElementById(id).classList.remove("active-btn");
+                });
+                state.sortBy = state.sortBy.filter(s => s !== "pricelow" && s !== "pricehigh");
+            }
+
+            state.sortBy.push(sortType);
+            button.classList.add("active-btn");
+        }
+
+        applyAllFilters();
+    });
+}
+
+
+handleSortClick("rathigh", "rathigh");
+handleSortClick("pricelow", "pricelow", "price");
+handleSortClick("pricehigh", "pricehigh", "price");
+handleSortClick("alpha", "alpha");
+
+
+
+document.getElementById("searchInput").addEventListener("input", function () {
+    state.searchText = this.value.toLowerCase();
+    applyAllFilters();
 });
